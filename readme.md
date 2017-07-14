@@ -5,9 +5,12 @@ Ground 2
 Development plan
 ================
 
+See Zenboard on github.
+Here's an initial sketch of what's required.
+
 1. Music theory lib
     - Create a good music theory library of modular functionality that can later be used by generators
-    - Write some demo examples
+    - Write some demo example
   
 1. Synthesis lib
     - Create some wave types
@@ -33,5 +36,13 @@ Development plan
 
 1. Optimize
     - Make it all run smoothly
+
+1. Later TODOs
+    - Sampling
+    - FFT of samples
+    - Synthesis from Fourier coefficients
+
+Form
+----
 
 1. Add features

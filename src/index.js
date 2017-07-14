@@ -130,3 +130,21 @@ createSong({
 })
 
 // TODO math: how does lerping tempo affect other timings?
+
+// passage: musical idea, which may or may not be complete or independent
+// piece: collection of passages
+// cycle: collection of pieces
+
+// sectional forms:
+/*
+- strophic (endless repeat AAA...)
+- medley/chain/through-composed (endless innovation ABC...)
+- binary (endless toggle ABAB...)
+- ternary ()
+  - simple ternary
+  - 
+*/
+
+// variational forms:
+
+// developmental forms:
