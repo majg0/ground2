@@ -1,3 +1,15 @@
+#executable
 a.out
-test.mid
+ground2
+
+#vscode settings
 .vscode/
+
+#midi
+*.mid
+
+#objects
+*.o
+
+#c++ code segmentation flags for vim plugin
+.ycm_extra_conf.py
