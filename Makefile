@@ -10,4 +10,6 @@ all: ground2
 ground2: $(OBJECT)
 	$(CXX) $(OBJECT) -o ground2
 
-clean: rm -f ground2 $(OBJECT)
+clean:
+	rm -f ground2 $(OBJECT)
+
