@@ -264,7 +264,7 @@ void midiTest () {
 
     // Write MIDI track chunks
     file << "MTrk";
-    w(file, 15, 4);
+    w(file, 30, 4);
 
     w(file, 0, 1); // delta time
     w(file, 0xFF58, 2); // event code: time signature
