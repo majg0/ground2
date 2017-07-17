@@ -223,31 +223,31 @@ void w (std::ofstream &file, int x, uint size) {
   file.write(b, size);
 }
 
-class Song {
-  std::vector<Instrument> instrumentPool;
+// class Song {
+//   std::vector<Instrument> instrumentPool;
 
-  Song (std::vector<Instrument> _instrumentPool)
-  : instrumentPool(_instrumentPool)
-  {}
+//   Song (std::vector<Instrument> _instrumentPool)
+//   : instrumentPool(_instrumentPool)
+//   {}
 
-  void writeSong () {
-    // get track count from instrument pool
-    // write some structural data of current chunk
-    // send structural data to instruments, according to current arrangement
-    // write instrument output to each track
-    // output data as midi
-  }
+//   void writeSong () {
+//     // get track count from instrument pool
+//     // write some structural data of current chunk
+//     // send structural data to instruments, according to current arrangement
+//     // write instrument output to each track
+//     // output data as midi
+//   }
 
-  void writeFile (const std::string &fileName) {
-    std::ofstream file(fileName, std::ios::binary);
-    // Write MIDI header
-    file << "MThd";
-    w(file, 6, 4); // length of header
-    w(file, 1, 2); // format
-    w(file, numTracks + 1, 2); // numTracks
-    w(file, 96, 2); // tempo
-  }
-};
+//   void writeFile (const std::string &fileName) {
+//     std::ofstream file(fileName, std::ios::binary);
+//     // Write MIDI header
+//     file << "MThd";
+//     w(file, 6, 4); // length of header
+//     w(file, 1, 2); // format
+//     w(file, numTracks + 1, 2); // numTracks
+//     w(file, 96, 2); // tempo
+//   }
+// };
 
 void midiTest () {
   // http://www.music.mcgill.ca/~ich/classes/mumt306/midiformat.pdf
@@ -308,7 +308,7 @@ int main (int argc, char *argv[]) {
 
   {
     Note note(C, FirstLine);
-    Note m6 = note + MinorSixth;
+    // Note m6 = note + MinorSixth;
   }
 
   {
