@@ -258,7 +258,7 @@ void midiTest () {
 
     // Write MIDI header
     w(file, 6, 4); // length of header
-    w(file, 1, 2); // format
+    w(file, 0, 2); // format
     w(file, 1, 2); // numTracks
     w(file, 96, 2); // tempo
 
