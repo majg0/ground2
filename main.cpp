@@ -23,33 +23,28 @@ enum AbstractIntervalId {
   DoubleOctave
 };
 
-enum IntervalId {
-  PerfectUnison,
-  MinorSecond,
-  MajorSecond,
-  MinorThird,
-  MajorThird,
-  PerfectFourth,
-  DiminishedFifth,
-  PerfectFifth,
-  MinorSixth,
-  MajorSixth,
-  MinorSeventh,
-  MajorSeventh,
-  PerfectOctave,
-  MinorNinth,
-  MajorNinth,
-  MinorTenth,
-  MajorTenth,
-  PerfectEleventh,
-  DiminishedTwelfth,
-  PerfectTwelfth,
-  MinorThirteenth,
-  MajorThirteenth,
-  MinorFourteenth,
-  MajorFourteenth,
-  PerfectDoubleOctave
+enum IntervalModifierId {
+  Perfect,
+  Diminished,
+  Augmented,
+  Minor,
+  Major,
+  Unspecified
 };
+
+class Interval {
+public:
+  AbstractIntervalId intervalId;
+  IntervalModifierId modifierId;
+  
+  Interval (AbstractIntervalId _intervalId, IntervalModifierId _modifierId)
+  : intervalId(_intervalId), modifierId(_modifierId)
+  {
+    cout << intervalId << "+" << modifierId << endl;
+  }
+};
+
+Interval augmentedNinth(Ninth, Augmented);
 
 /******************************************************************************
 Chords
@@ -98,16 +93,18 @@ enum ChordId {
   MajorTriadChord,
   MinorTriadChord,
   MajorSixthChord,
-  MinorSixthChord
+  MinorSixthChord,
+  DominantSeventhSharpNinth
 };
 
-vector<IntervalId> major_triad = { MajorThird, PerfectFifth };
-vector<IntervalId> minor_triad = { MinorThird, PerfectFifth };
-vector<IntervalId> major_sixth = { MajorThird, PerfectFifth, MajorSixth };
-vector<IntervalId> minor_sixth = { MinorThird, PerfectFifth, MinorSixth };
+vector<Interval> major_triad = { Interval(Third, Major), Interval(Fifth, Perfect) };
+vector<Interval> minor_triad = { Interval(Third, Minor), Interval(Fifth, Perfect) };
+vector<Interval> major_sixth = { Interval(Third, Major), Interval(Fifth, Perfect), Interval(Sixth, Major) };
+vector<Interval> minor_sixth = { Interval(Third, Minor), Interval(Fifth, Perfect), Interval(Sixth, Minor) };
+vector<Interval> dominant_seventh_sharp_ninth = { Interval(Third, Major), Interval(Fifth, Perfect), Interval(Seventh, Minor), Interval(Ninth, Augmented) };
 // TODO (Martin): add chords
 
-vector<IntervalId> _chordIntervals[] = {
+vector<Interval> _chordIntervals[] = {
   major_triad,
   minor_triad,
   major_sixth,
@@ -115,13 +112,13 @@ vector<IntervalId> _chordIntervals[] = {
 };
 
 struct Chord {
-  vector<IntervalId> intervals;
+  vector<Interval> intervals;
 
   Chord (ChordId id) {
     cout << "chord ";
     intervals = _chordIntervals[id];
     for (auto i : intervals) {
-      cout << i << ", ";
+      cout << i.intervalId << ", " << i.modifierId;
     }
     cout << "!" << endl;
   }
@@ -178,8 +175,10 @@ struct AbstractNote {
     return AbstractNote((NoteId)n);
   }
 
-  AbstractNote operator +(IntervalId rhs) const {
-    return *this + (int)rhs;
+  AbstractNote operator +(Interval rhs) const {
+    // TODO
+    return *this;
+    // return *this + (int)rhs.;
   }
 };
 
@@ -209,8 +208,10 @@ struct Note {
     return Note((NoteId)n, (OctaveId)o);
   }
 
-  Note operator +(IntervalId rhs) const {
-    return *this + (int)rhs;
+  Note operator +(Interval rhs) const {
+    // TODO
+    return *this;
+    // return *this + (int)rhs;
   }
 };
 

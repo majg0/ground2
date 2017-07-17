@@ -1,15 +1,20 @@
 CXX=clang++
 CXXFLAGS=-Wall -g -std=c++11
+LDFLAGS=
+SOURCES=$(wildcard *.cpp)
+OBJECTS=$(SOURCES:.cpp=.o)
+TARGET=ground2
 
-SOURCE=main.cpp
+all: $(TARGET)
 
-OBJECT=main.o
+$(TARGET): $(OBJECTS)
+	$(CXX) -o $@ $^ $(LDFLAGS) 
 
-all: ground2
+%.o: %.c %.h
+	$(CXX) $(CCFLAGS) -c $<
 
-ground2: $(OBJECT)
-	$(CXX) $(OBJECT) -o ground2
+%.o: %.c
+	$(CXX) $(CCFLAGS) -c $<
 
 clean:
-	rm -f ground2 $(OBJECT)
-
+	rm -f *.o $(TARGET)
