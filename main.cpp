@@ -55,7 +55,6 @@ enum IntervalId {
 Chords
 ******************************************************************************/
 
-namespace Chords {
 enum AbstractChordId {
   TriadChord,
   SixthChord,
@@ -127,9 +126,6 @@ struct Chord {
     cout << "!" << endl;
   }
 };
-};
-
-using namespace Chords;
 
 // TODO implement famouschord lookups for notation etc.
 // TODO upgrade famouschord to use murmurhash and hashtable, as lookups will be much faster.
@@ -227,87 +223,79 @@ void w (std::ofstream &file, int x, uint size) {
   file.write(b, size);
 }
 
-bool isLittleEndian() {
-  // TODO store this at startup in config
-  int x = 1;
-  unsigned char *test_endian = (unsigned char*)&x;
-  return test_endian[0] == 0;
-}
+class Song {
+  std::vector<Instrument> instrumentPool;
+
+  Song (std::vector<Instrument> _instrumentPool)
+  : instrumentPool(_instrumentPool)
+  {}
+
+  void writeSong () {
+    // get track count from instrument pool
+    // write some structural data of current chunk
+    // send structural data to instruments, according to current arrangement
+    // write instrument output to each track
+    // output data as midi
+  }
+
+  void writeFile (const std::string &fileName) {
+    std::ofstream file(fileName, std::ios::binary);
+    // Write MIDI header
+    file << "MThd";
+    w(file, 6, 4); // length of header
+    w(file, 1, 2); // format
+    w(file, numTracks + 1, 2); // numTracks
+    w(file, 96, 2); // tempo
+  }
+};
 
 void midiTest () {
   // http://www.music.mcgill.ca/~ich/classes/mumt306/midiformat.pdf
-
   {
     std::ofstream file("test.mid", std::ios::binary);
     file << "MThd";
     // <Header Chunk> = <chunk type><length><format><ntrks><division>
 
     // Write MIDI header
-    int len = 6; // always 6
-    short format = 0; // 0 / 1 / 2 // TODO (Martin): use format 1 instead
-    short numTracks = 1;
-    short bpm = 96;
-    w(file, len, 4);
-    w(file, format, 2);
-    w(file, numTracks, 2);
-    w(file, bpm, 2);
+    w(file, 6, 4); // length of header
+    w(file, 1, 2); // format
+    w(file, 1, 2); // numTracks
+    w(file, 96, 2); // tempo
 
     // Write MIDI track chunks
     file << "MTrk";
-    len = 15;
-    w(file, len, 4);
+    w(file, 15, 4);
 
-    int dt = 0;
-    int eventCode = 0xFF58; // time signature
-    w(file, dt, 1);
-    w(file, eventCode, 2);
-    len = 4;
-    w(file, len, 1);
-    int timeSignatureTop = 4;
-    int timeSignatureBottomPower = 2;
-    w(file, timeSignatureTop, 1);
-    w(file, timeSignatureBottomPower, 1);
-    int clocksPerClick = 24;
-    int thirtysecondNotesPerClick = 8;
-    w(file, clocksPerClick, 1);
-    w(file, thirtysecondNotesPerClick, 1);
+    w(file, 0, 1); // delta time
+    w(file, 0xFF58, 2); // event code: time signature
+    w(file, 4, 1); // event length
+    w(file, 4, 1); // top time signature number
+    w(file, 2, 1); // bottom time signature power
+    w(file, 24, 1); // clocks per click
+    w(file, 8, 1); // thirtytwo-notes per click
     
-    eventCode = 0xFF51; // tempo
-    w(file, dt, 1);
-    w(file, eventCode, 2);
-    len = 3;
-    int microsecondsPerQuarterNote = 500000;
-    w(file, len, 1);
-    w(file, microsecondsPerQuarterNote, 3);
+    w(file, 0, 1); // delta time
+    w(file, 0xFF51, 2); // set tempo
+    w(file, 3, 1); // numBytes
+    w(file, 500000, 3); // microseconds per quarter note
 
-    eventCode = 0xC0;
-    w(file, dt, 1);
-    w(file, eventCode, 1);
-    int program = 5;
-    w(file, program, 1);
+    w(file, 0, 1); // delta time
+    w(file, 0xC0, 1); // set program
+    w(file, 5, 1); // TODO parse 5 ??
 
-    eventCode = 0x90; // Note on
-    w(file, dt, 1);
-    w(file, eventCode, 1);
-    int note = 76; // E4
-    int velocity = 32; // piano
-    w(file, note, 1);
-    w(file, velocity, 1);
+    w(file, 0, 1); // delta time
+    w(file, 0x90, 1); // note on
+    w(file, 76, 1); // note, E4
+    w(file, 32, 1); // velocity piano
 
-    dt = 96;
-    eventCode = 0x80; // Note off
-    w(file, dt, 1);
-    w(file, eventCode, 1);
-    w(file, note, 1);
-    velocity = 64;
-    w(file, velocity, 1);
+    w(file, 96, 1); // delta time
+    w(file, 0x80, 1); // Note off
+    w(file, 76, 1); // note, E4
+    w(file, 64, 1); // velocity
 
-    dt = 0;
-    eventCode = 0xFF2F; // Track end
-    int value = 0;
-    w(file, dt, 1);
-    w(file, eventCode, 2);
-    w(file, value, 1);
+    w(file, 0, 1); // delta time
+    w(file, 0xFF2F, 2); // Track end
+    w(file, 0, 1); // obligatory end
   }
 }
 
