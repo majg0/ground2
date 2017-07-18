@@ -2,6 +2,8 @@
 #include <vector>
 #include <fstream>
 #include <string>
+#include <algorithm>
+#include <sstream>
 
 using namespace std;
 
@@ -24,27 +26,50 @@ enum AbstractIntervalId {
 };
 
 enum IntervalModifierId {
-  Perfect,
   Diminished,
-  Augmented,
   Minor,
+  Perfect,
   Major,
-  Unspecified
+  Augmented,
+  Unspecified_NUM,
 };
 
-class Interval {
-public:
+const int baseIntervalDistances[] = { 0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23, 24};
+const int minorMajorModifierValues[] = { -2, -1, 0, 0, 1, 0 };
+const int perfectModifierValues[] = { -1, 0, 0, 0, 1, 0 };
+const char modifierNotations[] = {
+  'd',
+  'm',
+  'P',
+  'M',
+  'A'
+};
+
+struct Interval {
   AbstractIntervalId intervalId;
   IntervalModifierId modifierId;
   
   Interval (AbstractIntervalId _intervalId, IntervalModifierId _modifierId)
   : intervalId(_intervalId), modifierId(_modifierId)
   {
-    cout << intervalId << "+" << modifierId << endl;
+    cout << getNotation() << endl;
+  }
+
+  const int getDistance () const {
+    int baseDistance = baseIntervalDistances[intervalId];
+    int d = baseDistance % 12;
+    const int* modifierValues = (d == 0 || d == 5 || d == 7)
+      ? perfectModifierValues
+      : minorMajorModifierValues;
+    return baseDistance + modifierValues[modifierId];
+  }
+
+  const std::string getNotation () const {
+    std::string i = to_string(1 + (int)intervalId);
+    char n(modifierNotations[modifierId]);
+    return n + i;
   }
 };
-
-Interval augmentedNinth(Ninth, Augmented);
 
 /******************************************************************************
 Chords
@@ -112,15 +137,24 @@ vector<Interval> _chordIntervals[] = {
 };
 
 struct Chord {
-  vector<Interval> intervals;
+  std::vector<Interval> intervals;
 
-  Chord (ChordId id) {
-    cout << "chord ";
-    intervals = _chordIntervals[id];
-    for (auto i : intervals) {
-      cout << i.intervalId << ", " << i.modifierId;
-    }
-    cout << "!" << endl;
+  Chord (ChordId id)
+  : intervals(_chordIntervals[id]) {
+    cout << "chord " << getIntervalsNotation() << endl;
+  }
+
+  std::string getIntervalsNotation () {
+    std::stringstream ss;
+    const auto end = intervals.end() - 1;
+    std::for_each(
+      intervals.begin(),
+      end,
+      [&ss] (const Interval& i) { ss << i.getNotation() << ", "; }
+    );
+    ss << end->getNotation();
+    std::string a = ss.str();
+    return a;
   }
 };
 
@@ -176,9 +210,7 @@ struct AbstractNote {
   }
 
   AbstractNote operator +(Interval rhs) const {
-    // TODO
-    return *this;
-    // return *this + (int)rhs.;
+    return *this + rhs.getDistance();
   }
 };
 
@@ -209,9 +241,7 @@ struct Note {
   }
 
   Note operator +(Interval rhs) const {
-    // TODO
-    return *this;
-    // return *this + (int)rhs;
+    return *this + rhs.getDistance();
   }
 };
 
@@ -309,7 +339,7 @@ int main (int argc, char *argv[]) {
 
   {
     Note note(C, FirstLine);
-    // Note m6 = note + MinorSixth;
+    note + Interval(Sixth, Minor);
   }
 
   {
