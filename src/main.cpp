@@ -22,41 +22,12 @@ enum AbstractChordId {
   ThirteenthChord
 };
 
-vector<AbstractIntervalId> triad = {
-  AbstractIntervalId::Third,
-  AbstractIntervalId::Fifth
-};
-vector<AbstractIntervalId> sixth = {
-  AbstractIntervalId::Third,
-  AbstractIntervalId::Fifth,
-  AbstractIntervalId::Sixth
-};
-vector<AbstractIntervalId> seventh = {
-  AbstractIntervalId::Third,
-  AbstractIntervalId::Fifth,
-  AbstractIntervalId::Seventh
-};
-vector<AbstractIntervalId> ninth = {
-  AbstractIntervalId::Third,
-  AbstractIntervalId::Fifth,
-  AbstractIntervalId::Seventh,
-  AbstractIntervalId::Ninth
-};
-vector<AbstractIntervalId> eleventh = {
-  AbstractIntervalId::Third,
-  AbstractIntervalId::Fifth,
-  AbstractIntervalId::Seventh,
-  AbstractIntervalId::Ninth,
-  AbstractIntervalId::Eleventh
-};
-vector<AbstractIntervalId> thirteenth = {
-  AbstractIntervalId::Third,
-  AbstractIntervalId::Fifth,
-  AbstractIntervalId::Seventh,
-  AbstractIntervalId::Ninth,
-  AbstractIntervalId::Eleventh,
-  AbstractIntervalId::Thirteenth
-};
+vector<AbstractIntervalId> triad = { Third, Fifth };
+vector<AbstractIntervalId> sixth = { Third, Fifth, Sixth };
+vector<AbstractIntervalId> seventh = { Third, Fifth, Seventh };
+vector<AbstractIntervalId> ninth = { Third, Fifth, Seventh, Ninth };
+vector<AbstractIntervalId> eleventh = { Third, Fifth, Seventh, Ninth, Eleventh };
+vector<AbstractIntervalId> thirteenth = { Third, Fifth, Seventh, Ninth, Eleventh, Thirteenth };
 // TODO (Martin): add abstract chords
 
 vector<AbstractIntervalId> _abstractChordIntervals[] = {
