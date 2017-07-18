@@ -1,7 +1,7 @@
 CXX=clang++
 CXXFLAGS=-Wall -g -std=c++14
 LDFLAGS=
-SOURCES=$(wildcard *.cpp)
+SOURCES=$(wildcard src/*.cpp)
 OBJECTS=$(SOURCES:.cpp=.o)
 TARGET=ground2
 

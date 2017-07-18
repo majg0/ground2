@@ -5,71 +5,9 @@
 #include <algorithm>
 #include <sstream>
 
+#include "interval.h"
+
 using namespace std;
-
-enum AbstractIntervalId {
-  Unison,
-  Second,
-  Third,
-  Fourth,
-  Fifth,
-  Sixth,
-  Seventh,
-  Octave,
-  Ninth,
-  Tenth,
-  Eleventh,
-  Twelfth,
-  Thirteenth,
-  Fourteenth,
-  DoubleOctave
-};
-
-enum IntervalModifierId {
-  Diminished,
-  Minor,
-  Perfect,
-  Major,
-  Augmented,
-  Unspecified_NUM,
-};
-
-const int baseIntervalDistances[] = { 0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23, 24};
-const int minorMajorModifierValues[] = { -2, -1, 0, 0, 1, 0 };
-const int perfectModifierValues[] = { -1, 0, 0, 0, 1, 0 };
-const char modifierNotations[] = {
-  'd',
-  'm',
-  'P',
-  'M',
-  'A'
-};
-
-struct Interval {
-  AbstractIntervalId intervalId;
-  IntervalModifierId modifierId;
-  
-  Interval (AbstractIntervalId _intervalId, IntervalModifierId _modifierId)
-  : intervalId(_intervalId), modifierId(_modifierId)
-  {
-    cout << getNotation() << endl;
-  }
-
-  const int getDistance () const {
-    int baseDistance = baseIntervalDistances[intervalId];
-    int d = baseDistance % 12;
-    const int* modifierValues = (d == 0 || d == 5 || d == 7)
-      ? perfectModifierValues
-      : minorMajorModifierValues;
-    return baseDistance + modifierValues[modifierId];
-  }
-
-  const std::string getNotation () const {
-    std::string i = to_string(1 + (int)intervalId);
-    char n(modifierNotations[modifierId]);
-    return n + i;
-  }
-};
 
 /******************************************************************************
 Chords
@@ -84,12 +22,41 @@ enum AbstractChordId {
   ThirteenthChord
 };
 
-vector<AbstractIntervalId> triad = { Third, Fifth };
-vector<AbstractIntervalId> sixth = { Third, Fifth, Sixth };
-vector<AbstractIntervalId> seventh = { Third, Fifth, Seventh };
-vector<AbstractIntervalId> ninth = { Third, Fifth, Seventh, Ninth };
-vector<AbstractIntervalId> eleventh = { Third, Fifth, Seventh, Ninth, Eleventh };
-vector<AbstractIntervalId> thirteenth = { Third, Fifth, Seventh, Ninth, Eleventh, Thirteenth };
+vector<AbstractIntervalId> triad = {
+  AbstractIntervalId::Third,
+  AbstractIntervalId::Fifth
+};
+vector<AbstractIntervalId> sixth = {
+  AbstractIntervalId::Third,
+  AbstractIntervalId::Fifth,
+  AbstractIntervalId::Sixth
+};
+vector<AbstractIntervalId> seventh = {
+  AbstractIntervalId::Third,
+  AbstractIntervalId::Fifth,
+  AbstractIntervalId::Seventh
+};
+vector<AbstractIntervalId> ninth = {
+  AbstractIntervalId::Third,
+  AbstractIntervalId::Fifth,
+  AbstractIntervalId::Seventh,
+  AbstractIntervalId::Ninth
+};
+vector<AbstractIntervalId> eleventh = {
+  AbstractIntervalId::Third,
+  AbstractIntervalId::Fifth,
+  AbstractIntervalId::Seventh,
+  AbstractIntervalId::Ninth,
+  AbstractIntervalId::Eleventh
+};
+vector<AbstractIntervalId> thirteenth = {
+  AbstractIntervalId::Third,
+  AbstractIntervalId::Fifth,
+  AbstractIntervalId::Seventh,
+  AbstractIntervalId::Ninth,
+  AbstractIntervalId::Eleventh,
+  AbstractIntervalId::Thirteenth
+};
 // TODO (Martin): add abstract chords
 
 vector<AbstractIntervalId> _abstractChordIntervals[] = {
