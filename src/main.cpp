@@ -6,6 +6,7 @@
 #include <sstream>
 
 #include "interval.h"
+#include "note.h"
 
 using namespace std;
 
@@ -103,93 +104,15 @@ struct Chord {
 other
 ******************************************************************************/
 
-enum NoteId {
-  C,
-  Db,
-  D,
-  Eb,
-  E,
-  F,
-  Gb,
-  G,
-  Ab,
-  A,
-  Bb,
-  B,
-  NUM
-};
+// void w1 (std::ostream &w, int x) {
+//   w << (char)x;
+// }
 
-enum OctaveId {
-  DoubleContra = -5,
-  SubContra,
-  Contra,
-  Great,
-  Small,
-  FirstLine = 0,
-  SecondLine,
-  ThirdLine,
-  FourthLine,
-  FifthLine,
-  SixthLine
-};
-
-struct AbstractNote {
-  NoteId noteId;
-
-  AbstractNote (NoteId id)
-  : noteId(id) {
-    cout << "abstract note " << id << endl;
-  }
-
-  AbstractNote operator +(int rhs) const {
-    int nc = (int)noteId + rhs;
-    int n = nc % 12;
-    return AbstractNote((NoteId)n);
-  }
-
-  AbstractNote operator +(Interval rhs) const {
-    return *this + rhs.getDistance();
-  }
-};
-
-struct Note {
-  NoteId noteId;
-  OctaveId octaveId;
-
-  Note (NoteId nid)
-  : noteId(nid), octaveId(FirstLine) {
-    cout << "note " << noteId << " in " << octaveId << endl;
-  }
-
-  Note (NoteId nid, OctaveId oid)
-  : noteId(nid), octaveId(oid) {
-    cout << "note " << noteId << " in " << octaveId << endl;
-  }
-
-  const char* toString () {
-    return "C";
-  }
-
-  Note operator +(int rhs) const {
-    int nc = (int)noteId + rhs;
-    int n = nc % 12;
-    int oc = nc / 12;
-    int o = (int)octaveId + oc;
-    return Note((NoteId)n, (OctaveId)o);
-  }
-
-  Note operator +(Interval rhs) const {
-    return *this + rhs.getDistance();
-  }
-};
-
-void w (std::ofstream &file, int x, uint size) {
-  char b[size];
+void w (std::ostream &w, int x, int size) {
   const int lasti = size - 1;
   for (int i = 0; i != size; ++i) {
-    b[i] = (char)(x >> (lasti - i) * 8u);
+    w << (char)(x >> (lasti - i) * 8);
   }
-  file.write(b, size);
 }
 
 // class Song {
@@ -222,49 +145,54 @@ void midiTest () {
   // http://www.music.mcgill.ca/~ich/classes/mumt306/midiformat.pdf
   {
     std::ofstream file("test.mid", std::ios::binary);
-    file << "MThd";
-    // <Header Chunk> = <chunk type><length><format><ntrks><division>
 
     // Write MIDI header
-    w(file, 6, 4); // length of header
+    file << "MThd";
+    w(file, 6, 4); // header length
     w(file, 0, 2); // format
     w(file, 1, 2); // numTracks
-    w(file, 96, 2); // tempo
+    w(file, 96, 2); // division
 
     // Write MIDI track chunks
-    file << "MTrk";
-    w(file, 30, 4);
+    {
+      std::stringstream track;
 
-    w(file, 0, 1); // delta time
-    w(file, 0xFF58, 2); // event code: time signature
-    w(file, 4, 1); // event length
-    w(file, 4, 1); // top time signature number
-    w(file, 2, 1); // bottom time signature power
-    w(file, 24, 1); // clocks per click
-    w(file, 8, 1); // thirtytwo-notes per click
-    
-    w(file, 0, 1); // delta time
-    w(file, 0xFF51, 2); // set tempo
-    w(file, 3, 1); // numBytes
-    w(file, 500000, 3); // microseconds per quarter note
+      w(track, 0, 1); // delta time
+      w(track, 0xFF58, 2); // event code: time signature
+      w(track, 4, 1); // event length
+      w(track, 4, 1); // top time signature number
+      w(track, 2, 1); // bottom time signature power
+      w(track, 24, 1); // clocks per click
+      w(track, 8, 1); // thirtytwo-notes per click
+      
+      w(track, 0, 1); // delta time
+      w(track, 0xFF51, 2); // set tempo
+      w(track, 3, 1); // numBytes
+      w(track, 500000, 3); // microseconds per quarter note
 
-    w(file, 0, 1); // delta time
-    w(file, 0xC0, 1); // set program
-    w(file, 5, 1); // TODO parse 5 ??
+      w(track, 0, 1); // delta time
+      w(track, 0xC0, 1); // set program
+      w(track, 5, 1); // TODO parse 5 ??
 
-    w(file, 0, 1); // delta time
-    w(file, 0x90, 1); // note on
-    w(file, 76, 1); // note, E4
-    w(file, 32, 1); // velocity piano
+      w(track, 0, 1); // delta time
+      w(track, 0x90, 1); // note on
+      w(track, 76, 1); // note, E4
+      w(track, 32, 1); // velocity piano
 
-    w(file, 96, 1); // delta time
-    w(file, 0x80, 1); // Note off
-    w(file, 76, 1); // note, E4
-    w(file, 64, 1); // velocity
+      w(track, 96, 1); // delta time
+      w(track, 0x80, 1); // Note off
+      w(track, 76, 1); // note, E4
+      w(track, 64, 1); // velocity
 
-    w(file, 0, 1); // delta time
-    w(file, 0xFF2F, 2); // Track end
-    w(file, 0, 1); // obligatory end
+      w(track, 0, 1); // delta time
+      w(track, 0xFF2F, 2); // Track end
+      w(track, 0, 1); // obligatory end
+
+      file << "MTrk";
+      std::streampos len = track.tellp();
+      w(file, len, 4);
+      file << track.rdbuf();
+    }
   }
 }
 

@@ -11,10 +11,10 @@ $(TARGET): $(OBJECTS)
 	$(CXX) -o $@ $^ $(LDFLAGS) 
 
 %.o: %.c %.h
-	$(CXX) $(CCFLAGS) -c $<
+	$(CXX) $(CXXFLAGS) -c $<
 
 %.o: %.c
-	$(CXX) $(CCFLAGS) -c $<
+	$(CXX) $(CXXFLAGS) -c $<
 
 clean:
-	rm -f *.o $(TARGET)
+	rm -f **/*.o $(TARGET)

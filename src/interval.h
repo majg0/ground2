@@ -16,7 +16,8 @@ enum AbstractIntervalId {
   Twelfth,
   Thirteenth,
   Fourteenth,
-  DoubleOctave
+  DoubleOctave,
+  AbstractIntervalId_NUM
 };
 
 enum IntervalModifierId {
@@ -25,7 +26,7 @@ enum IntervalModifierId {
   Perfect,
   Major,
   Augmented,
-  Unspecified_NUM,
+  IntervalModifierId_NUM,
 };
 
 struct Interval {
