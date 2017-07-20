@@ -47,6 +47,7 @@ struct Note {
   NoteId noteId;
   OctaveId octaveId;
 
+  Note ();
   Note (NoteId nid);
   Note (NoteId nid, OctaveId oid);
 

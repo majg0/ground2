@@ -78,6 +78,10 @@ vector<Interval> _chordIntervals[] = {
 struct Chord {
   std::vector<Interval> intervals;
 
+  Chord ()
+  : intervals()
+  {}
+
   Chord (ChordId id)
   : intervals(_chordIntervals[id]) {
     cout << "chord " << getIntervalsNotation() << endl;

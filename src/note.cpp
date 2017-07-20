@@ -16,6 +16,10 @@ AbstractNote AbstractNote::operator+(const Interval& rhs) const {
   return *this + rhs.getDistance();
 }
 
+Note::Note()
+: noteId(C), octaveId(FirstLine)
+{}
+
 Note::Note(NoteId _noteId)
 : noteId(_noteId), octaveId(FirstLine)
 {}
