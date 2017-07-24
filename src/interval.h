@@ -1,7 +1,9 @@
 #ifndef GROUND2_INTERVAL_H
 #define GROUND2_INTERVAL_H
 
-enum AbstractIntervalId {
+#include <vector>
+
+enum AbstractIntervalId : int {
   Unison,
   Second,
   Third,
@@ -32,11 +34,12 @@ enum IntervalModifierId {
 struct Interval {
   AbstractIntervalId intervalId;
   IntervalModifierId modifierId;
-  
+
   Interval (AbstractIntervalId, IntervalModifierId);
 
   const int getDistance () const;
   const std::string getNotation () const;
 };
+
 
 #endif

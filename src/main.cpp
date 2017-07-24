@@ -1,12 +1,13 @@
 #include <iostream>
 #include <vector>
-#include <fstream>
+
 #include <string>
 #include <algorithm>
 #include <sstream>
-
+#include <fstream>
 #include "interval.h"
 #include "note.h"
+#include "chord.h"
 
 using namespace std;
 
@@ -14,92 +15,10 @@ using namespace std;
 Chords
 ******************************************************************************/
 
-enum AbstractChordId {
-  TriadChord,
-  SixthChord,
-  SeventhChord,
-  NinthChord,
-  EleventhChord,
-  ThirteenthChord
-};
 
-vector<AbstractIntervalId> triad = { Third, Fifth };
-vector<AbstractIntervalId> sixth = { Third, Fifth, Sixth };
-vector<AbstractIntervalId> seventh = { Third, Fifth, Seventh };
-vector<AbstractIntervalId> ninth = { Third, Fifth, Seventh, Ninth };
-vector<AbstractIntervalId> eleventh = { Third, Fifth, Seventh, Ninth, Eleventh };
-vector<AbstractIntervalId> thirteenth = { Third, Fifth, Seventh, Ninth, Eleventh, Thirteenth };
-// TODO (Martin): add abstract chords
 
-vector<AbstractIntervalId> _abstractChordIntervals[] = {
-  triad,
-  sixth,
-  seventh,
-  ninth,
-  eleventh,
-  thirteenth
-};
 
-struct AbstractChord {
-  vector<AbstractIntervalId> intervals;
 
-  AbstractChord (AbstractChordId id) {
-    cout << "abstract chord ";
-    intervals = _abstractChordIntervals[id];
-    for (auto i : intervals) {
-      cout << i << ", ";
-    }
-    cout << "!" << endl;
-  }
-};
-
-enum ChordId {
-  MajorTriadChord,
-  MinorTriadChord,
-  MajorSixthChord,
-  MinorSixthChord,
-  DominantSeventhSharpNinth
-};
-
-vector<Interval> major_triad = { Interval(Third, Major), Interval(Fifth, Perfect) };
-vector<Interval> minor_triad = { Interval(Third, Minor), Interval(Fifth, Perfect) };
-vector<Interval> major_sixth = { Interval(Third, Major), Interval(Fifth, Perfect), Interval(Sixth, Major) };
-vector<Interval> minor_sixth = { Interval(Third, Minor), Interval(Fifth, Perfect), Interval(Sixth, Minor) };
-vector<Interval> dominant_seventh_sharp_ninth = { Interval(Third, Major), Interval(Fifth, Perfect), Interval(Seventh, Minor), Interval(Ninth, Augmented) };
-// TODO (Martin): add chords
-
-vector<Interval> _chordIntervals[] = {
-  major_triad,
-  minor_triad,
-  major_sixth,
-  minor_sixth
-};
-
-struct Chord {
-  std::vector<Interval> intervals;
-
-  Chord ()
-  : intervals()
-  {}
-
-  Chord (ChordId id)
-  : intervals(_chordIntervals[id]) {
-    cout << "chord " << getIntervalsNotation() << endl;
-  }
-
-  std::string getIntervalsNotation () {
-    std::stringstream ss;
-    const auto end = intervals.end() - 1;
-    std::for_each(
-      intervals.begin(),
-      end,
-      [&ss] (const Interval& i) { ss << i.getNotation() << ", "; }
-    );
-    ss << end->getNotation();
-    std::string a = ss.str();
-    return a;
-  }
-};
 
 // TODO implement famouschord lookups for notation etc.
 // TODO upgrade famouschord to use murmurhash and hashtable, as lookups will be much faster.
@@ -168,7 +87,7 @@ void midiTest () {
       w(track, 2, 1); // bottom time signature power
       w(track, 24, 1); // clocks per click
       w(track, 8, 1); // thirtytwo-notes per click
-      
+
       w(track, 0, 1); // delta time
       w(track, 0xFF51, 2); // set tempo
       w(track, 3, 1); // numBytes

@@ -1,5 +1,7 @@
 #include <string>
 #include "interval.h"
+#include <vector>
+using namespace std;
 
 const int baseIntervalDistances[] = { 0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23, 24};
 const int minorMajorModifierValues[] = { -2, -1, 0, 0, 1, 0 };

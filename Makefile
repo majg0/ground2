@@ -8,7 +8,7 @@ TARGET=ground2
 all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
-	$(CXX) -o $@ $^ $(LDFLAGS) 
+	$(CXX) -o $@ $^ $(LDFLAGS)
 
 %.o: %.c %.h
 	$(CXX) $(CXXFLAGS) -c $<
@@ -17,4 +17,4 @@ $(TARGET): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) -c $<
 
 clean:
-	rm -f **/*.o $(TARGET)
+	rm -f ./**.o $(TARGET)
