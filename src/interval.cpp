@@ -1,6 +1,6 @@
 #include <string>
-#include "interval.h"
 #include <vector>
+#include "interval.h"
 using namespace std;
 
 const int baseIntervalDistances[] = { 0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23, 24};
@@ -14,7 +14,7 @@ const char modifierNotations[] = {
   'A'
 };
 
-Interval::Interval(AbstractIntervalId _intervalId, IntervalModifierId _modifierId)
+Interval::Interval(const AbstractIntervalId _intervalId, const IntervalModifierId _modifierId)
 : intervalId(_intervalId), modifierId(_modifierId)
 {}
 

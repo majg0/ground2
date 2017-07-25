@@ -1,4 +1,3 @@
-
 #include <vector>
 #include <string>
 #include <iostream>
@@ -8,6 +7,49 @@
 #include "chord.h"
 
 using namespace std;
+
+///////////////////////////////////////////////////////////////////////////////
+// Chords
+///////////////////////////////////////////////////////////////////////////////
+
+const std::vector<Interval> major_triad = { Interval(Third, Major), Interval(Fifth, Perfect) };
+const std::vector<Interval> minor_triad = { Interval(Third, Minor), Interval(Fifth, Perfect) };
+const std::vector<Interval> major_sixth = { Interval(Third, Major), Interval(Fifth, Perfect), Interval(Sixth, Major) };
+const std::vector<Interval> minor_sixth = { Interval(Third, Minor), Interval(Fifth, Perfect), Interval(Sixth, Minor) };
+const std::vector<Interval> dominant_seventh_sharp_ninth = { Interval(Third, Major), Interval(Fifth, Perfect), Interval(Seventh, Minor), Interval(Ninth, Augmented) };
+// TODO (Martin): add chords
+
+const std::vector<Interval> _chordIntervals[] = {
+  major_triad,
+  minor_triad,
+  major_sixth,
+  minor_sixth
+};
+
+Chord::Chord(const ChordId id)
+: intervals(_chordIntervals[id]) {
+  cout << "chord " << getIntervalsNotation() << endl;
+}
+
+Chord::Chord(const std::vector<Interval>& _intervals)
+: intervals(_intervals)
+{}
+
+const std::string Chord::getIntervalsNotation () const {
+  std::stringstream ss;
+  const auto end = intervals.end() - 1;
+  std::for_each(
+    intervals.begin(),
+    end,
+    [&ss] (const Interval& i) { ss << i.getNotation() << ", "; }
+  );
+  ss << end->getNotation();
+  return ss.str();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Abstract Chords
+///////////////////////////////////////////////////////////////////////////////
 
 const std::vector<AbstractIntervalId> triad = { Third, Fifth };
 const std::vector<AbstractIntervalId> sixth = { Third, Fifth, Sixth };
@@ -26,40 +68,7 @@ const std::vector<AbstractIntervalId> _abstractChordIntervals[] = {
   thirteenth
 };
 
-const std::vector<Interval> major_triad = { Interval(Third, Major), Interval(Fifth, Perfect) };
-const std::vector<Interval> minor_triad = { Interval(Third, Minor), Interval(Fifth, Perfect) };
-const std::vector<Interval> major_sixth = { Interval(Third, Major), Interval(Fifth, Perfect), Interval(Sixth, Major) };
-const std::vector<Interval> minor_sixth = { Interval(Third, Minor), Interval(Fifth, Perfect), Interval(Sixth, Minor) };
-const std::vector<Interval> dominant_seventh_sharp_ninth = { Interval(Third, Major), Interval(Fifth, Perfect), Interval(Seventh, Minor), Interval(Ninth, Augmented) };
-// TODO (Martin): add chords
-
-const std::vector<Interval> _chordIntervals[] = {
-  major_triad,
-  minor_triad,
-  major_sixth,
-  minor_sixth
-};
-
-
-Chord::Chord(ChordId id) : intervals(_chordIntervals[id]) {
-  cout << "chord " << getIntervalsNotation() << endl;
-}
-
-std::string Chord::getIntervalsNotation () {
-  std::stringstream ss;
-  const auto end = intervals.end() - 1;
-  std::for_each(
-    intervals.begin(),
-    end,
-    [&ss] (const Interval& i) { ss << i.getNotation() << ", "; }
-  );
-  ss << end->getNotation();
-  std::string a = ss.str();
-  return a;
-}
-
-
-AbstractChord::AbstractChord (AbstractChordId id) {
+AbstractChord::AbstractChord (const AbstractChordId id) {
   cout << "abstract chord ";
   intervals = _abstractChordIntervals[id];
   for (auto i : intervals) {

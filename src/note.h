@@ -1,7 +1,7 @@
 #ifndef GROUND2_NOTE_H
 #define GROUND2_NOTE_H
 
-enum NoteId {
+enum NoteId : int {
   C,
   Db,
   D,
@@ -17,7 +17,7 @@ enum NoteId {
   NoteId_NUM
 };
 
-enum OctaveId {
+enum OctaveId : int {
   DoubleContra,
   SubContra,
   Contra,
@@ -37,10 +37,10 @@ struct Interval;
 struct AbstractNote {
   NoteId noteId;
 
-  AbstractNote (NoteId);
+  AbstractNote (const NoteId);
 
-  AbstractNote operator +(int rhs) const;
-  AbstractNote operator +(const Interval& rhs) const;
+  const AbstractNote operator +(const int rhs) const;
+  const AbstractNote operator +(const Interval& rhs) const;
 };
 
 struct Note {
@@ -48,13 +48,13 @@ struct Note {
   OctaveId octaveId;
 
   Note ();
-  Note (NoteId nid);
-  Note (NoteId nid, OctaveId oid);
+  Note (const NoteId nid);
+  Note (const NoteId nid, const OctaveId oid);
 
   const std::string toString () const; // TODO rename to reflect type of string?
 
-  Note operator +(int rhs) const;
-  Note operator +(const Interval& rhs) const;
+  const Note operator +(int rhs) const;
+  const Note operator +(const Interval& rhs) const;
 };
 
 #endif

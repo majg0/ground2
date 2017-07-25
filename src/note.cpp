@@ -2,17 +2,17 @@
 #include "interval.h"
 #include "note.h"
 
-AbstractNote::AbstractNote(NoteId _noteId)
+AbstractNote::AbstractNote(const NoteId _noteId)
 : noteId(_noteId)
 {}
 
-AbstractNote AbstractNote::operator+(int rhs) const {
+const AbstractNote AbstractNote::operator+(const int rhs) const {
   int nc = (int)noteId + rhs;
   int n = nc % 12;
   return AbstractNote((NoteId)n);
 }
 
-AbstractNote AbstractNote::operator+(const Interval& rhs) const {
+const AbstractNote AbstractNote::operator+(const Interval& rhs) const {
   return *this + rhs.getDistance();
 }
 
@@ -20,11 +20,11 @@ Note::Note()
 : noteId(C), octaveId(FirstLine)
 {}
 
-Note::Note(NoteId _noteId)
+Note::Note(const NoteId _noteId)
 : noteId(_noteId), octaveId(FirstLine)
 {}
 
-Note::Note(NoteId _noteId, OctaveId _octaveId)
+Note::Note(const NoteId _noteId, const OctaveId _octaveId)
 : noteId(_noteId), octaveId(_octaveId)
 {}
 
@@ -32,7 +32,7 @@ const std::string Note::toString () const {
   return std::string("C"); // TODO
 }
 
-Note Note::operator+(int rhs) const {
+const Note Note::operator+(const int rhs) const {
   int nc = (int)noteId + rhs;
   int n = nc % 12;
   int oc = nc / 12;
@@ -40,7 +40,7 @@ Note Note::operator+(int rhs) const {
   return Note((NoteId)n, (OctaveId)o);
 }
 
-Note Note::operator+(const Interval& rhs) const {
+const Note Note::operator+(const Interval& rhs) const {
   return *this + rhs.getDistance();
 }
 

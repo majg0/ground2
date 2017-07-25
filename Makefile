@@ -17,4 +17,5 @@ $(TARGET): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) -c $<
 
 clean:
-	rm -f ./**.o $(TARGET)
+	find . -name "*.o" -type f -delete
+	rm $(TARGET)
